@@ -11,4 +11,4 @@ candles = strategy.MACDStrategyOnly(MACDslow=26, MACDfast=12, MACDsignal=9)
 candles.to_csv("w_decision.csv")
 
 backtesting = LAS("BTC", candles, 10000, 0).run_backtest()
-backtesting["Transactions"].to_csv("transactions.csv", sep=";")
+backtesting["Transactions"].to_csv("transactions.csv", sep=";") 

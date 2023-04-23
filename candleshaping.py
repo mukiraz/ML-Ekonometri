@@ -45,17 +45,17 @@ class CandleShaping:
 
         #Here we are creating a dictionary for the DataFrame
         candles = {
-            CandleColumns.ID : id_column,
-            CandleColumns.OPEN : open_column,
-            CandleColumns.CLOSE : close_column,
-            CandleColumns.HIGH :high_column,
-            CandleColumns.LOW : low_column,
-            CandleColumns.VOLUME : volume_column
+            CandleColumns.ID.value : id_column,
+            CandleColumns.OPEN.value : open_column,
+            CandleColumns.CLOSE.value : close_column,
+            CandleColumns.HIGH.value :high_column,
+            CandleColumns.LOW.value : low_column,
+            CandleColumns.VOLUME.value : volume_column
             }
         #Cconverting dictionary to dataframe
         candles = pd.DataFrame(candles, index=None)
         #Sorting dataframe.
-        candles = candles.sort_values(by=[CandleColumns.ID])
+        candles = candles.sort_values(by=[CandleColumns.ID.value])
 
         return candles.reset_index(drop=True)
 
@@ -75,11 +75,11 @@ class CandleShaping:
             pandas dataframe containing the candle values. (Id, Open, Close, High, Low, Volume)
 
         """
-        return candles.astype({CandleColumns.OPEN:'float',
-                             CandleColumns.CLOSE:'float',
-                             CandleColumns.HIGH:'float',
-                             CandleColumns.LOW:'float',
-                             CandleColumns.VOLUME:'float'})
+        return candles.astype({CandleColumns.OPEN.value:'float',
+                             CandleColumns.CLOSE.value:'float',
+                             CandleColumns.HIGH.value:'float',
+                             CandleColumns.LOW.value:'float',
+                             CandleColumns.VOLUME.value:'float'})
 
     @staticmethod
     def to_date_time(candles:pd.DataFrame):

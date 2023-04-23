@@ -63,20 +63,20 @@ class TransactionsData:
     explanation:float= ""
     total_value_of_wallet:float = 0
     df_transactions:pd.DataFrame = pd.DataFrame(columns = [
-        TC.SYMBOL,
-        TC.OPERATION_TIME,
-        TC.OPERATION,
-        TC.POSITION,
-        TC.ASSET_AMOUNT,
-        TC.ASSET_PRICE,
-        TC.ASSET_COST,
-        TC.COMISSION,
-        TC.COMISSION_FEE,
-        TC.ASSET_AMOUNT_AFTER_COMISSION,
-        TC.STOP_PRICE,
-        TC.SELL_PRICE,
-        TC.WALLET_VALUE,
-        TC.EXPLANATION])
+        TC.SYMBOL.value,
+        TC.OPERATION_TIME.value,
+        TC.OPERATION.value,
+        TC.POSITION.value,
+        TC.ASSET_AMOUNT.value,
+        TC.ASSET_PRICE.value,
+        TC.ASSET_COST.value,
+        TC.COMISSION.value,
+        TC.COMISSION_FEE.value,
+        TC.ASSET_AMOUNT_AFTER_COMISSION.value,
+        TC.STOP_PRICE.value,
+        TC.SELL_PRICE.value,
+        TC.WALLET_VALUE.value,
+        TC.EXPLANATION.value])
 
 @dataclass()
 class MachineLearningData:
@@ -240,20 +240,20 @@ class BaseBacktesting():
 
         """
         data = {
-                TC.SYMBOL : self.operation_data.symbol,
-                TC.OPERATION_TIME : self.time_data.operation_time,
-                TC.OPERATION : self.operation_data.operation,
-                TC.POSITION : self.operation_data.position,
-                TC.ASSET_AMOUNT : self.asset_and_price_data.asset_amount,
-                TC.ASSET_PRICE : self.asset_and_price_data.asset_operation_price,
-                TC.ASSET_COST : self.asset_and_price_data.asset_cost,
-                TC.COMISSION : self.comission_data.comission,
-                TC.COMISSION_FEE : self.comission_data.comission_fee,
-                TC.ASSET_AMOUNT_AFTER_COMISSION : self.comission_data.coin_amount_after_comission,
-                TC.STOP_PRICE : self.asset_and_price_data.asset_stop_price,
-                TC.SELL_PRICE : self.asset_and_price_data.asset_sell_price,
-                TC.WALLET_VALUE : self.transaction_data.total_value_of_wallet,
-                TC.EXPLANATION : self.transaction_data.explanation
+                TC.SYMBOL.value : self.operation_data.symbol,
+                TC.OPERATION_TIME.value : self.time_data.operation_time,
+                TC.OPERATION.value : self.operation_data.operation,
+                TC.POSITION.value : self.operation_data.position,
+                TC.ASSET_AMOUNT.value : self.asset_and_price_data.asset_amount,
+                TC.ASSET_PRICE.value : self.asset_and_price_data.asset_operation_price,
+                TC.ASSET_COST.value : self.asset_and_price_data.asset_cost,
+                TC.COMISSION.value : self.comission_data.comission,
+                TC.COMISSION_FEE.value : self.comission_data.comission_fee,
+                TC.ASSET_AMOUNT_AFTER_COMISSION.value : self.comission_data.coin_amount_after_comission,
+                TC.STOP_PRICE.value : self.asset_and_price_data.asset_stop_price,
+                TC.SELL_PRICE.value : self.asset_and_price_data.asset_sell_price,
+                TC.WALLET_VALUE.value : self.transaction_data.total_value_of_wallet,
+                TC.EXPLANATION.value : self.transaction_data.explanation
                 }
         new_row = pd.DataFrame(data, index=[0])
         self.transaction_data.df_transactions = pd.concat([new_row, self.transaction_data.df_transactions.loc[:]]).reset_index(drop=True)
@@ -272,11 +272,11 @@ class BaseBacktesting():
         None.
 
         """
-        self.operation_data.operation = Terms.BUY #ok
+        self.operation_data.operation = Terms.BUY.value #ok
         self.toggle_has() #ok
-        self.time_data.operation_time = self.operation_data.candles_with_strategy[CandleColumns.ID][i+1] #ok
+        self.time_data.operation_time = self.operation_data.candles_with_strategy[CandleColumns.ID.value][i+1] #ok
         self.time_data.buy_time = self.time_data.operation_time #ok
-        self.asset_and_price_data.asset_buy_price = self.operation_data.candles_with_strategy[CandleColumns.CLOSE][i] #ok
+        self.asset_and_price_data.asset_buy_price = self.operation_data.candles_with_strategy[CandleColumns.CLOSE.value][i] #ok
         self.calculate_asset_amount() #ok
         self.calculate_comission() #ok
         # comission fee is the parity value( USD, USDT,etc.)
@@ -302,12 +302,12 @@ class BaseBacktesting():
         None.
 
         """
-        self.operation_data.operation = Terms.SELL
+        self.operation_data.operation = Terms.SELL.value
         self.toggle_has()
         self.calculate_comission()
-        self.asset_and_price_data.asset_sell_price = self.operation_data.candles_with_strategy[CandleColumns.CLOSE][i]
+        self.asset_and_price_data.asset_sell_price = self.operation_data.candles_with_strategy[CandleColumns.CLOSE.value][i]
         self.asset_and_price_data.asset_operation_price = self.asset_and_price_data.asset_sell_price
-        self.time_data.operation_time = self.operation_data.candles_with_strategy[CandleColumns.ID][i+1]
+        self.time_data.operation_time = self.operation_data.candles_with_strategy[CandleColumns.ID.value][i+1]
         self.time_data.sell_time = self.time_data.operation_time
 
     def calculate_win_rate_and_profit(self) -> tuple:
@@ -328,11 +328,11 @@ class BaseBacktesting():
             (win_rate, profit)
         """
         try:
-            profit = self.transaction_data.df_transactions[TC.EXPLANATION].value_counts()[Terms.PROFIT]
+            profit = self.transaction_data.df_transactions[TC.EXPLANATION.value].value_counts()[Terms.PROFIT.value]
         except KeyError:
             profit = 0
         try:
-            loss = self.transaction_data.df_transactions[TC.EXPLANATION].value_counts()[Terms.LOSS]
+            loss = self.transaction_data.df_transactions[TC.EXPLANATION.value].value_counts()[Terms.LOSS.value]
         except KeyError:
             loss = 0
 
@@ -414,9 +414,9 @@ class LongAndShort(BaseBacktesting):
         self.prepare_sell_long_and_short(i)
 
         if self.asset_and_price_data.asset_buy_price < self.asset_and_price_data.asset_sell_price:
-            self.transaction_data.explanation = Terms.PROFIT
+            self.transaction_data.explanation = Terms.PROFIT.value
         else:
-            self.transaction_data.explanation = Terms.LOSS
+            self.transaction_data.explanation = Terms.LOSS.value
 
         self.asset_and_price_data.cash_ready += self.asset_and_price_data.asset_cost
         self.transaction_data.total_value_of_wallet = self.asset_and_price_data.cash_ready
@@ -443,12 +443,12 @@ class LongAndShort(BaseBacktesting):
             #profit
             net_profit = (self.asset_and_price_data.asset_buy_price - self.asset_and_price_data.asset_sell_price) * self.asset_and_price_data.asset_amount
             self.transaction_data.total_value_of_wallet += net_profit
-            self.transaction_data.explanation = Terms.PROFIT
+            self.transaction_data.explanation = Terms.PROFIT.value
         else:
             #loss
             net_loss = (self.asset_and_price_data.asset_sell_price - self.asset_and_price_data.asset_buy_price) * self.asset_and_price_data.asset_amount
             self.transaction_data.total_value_of_wallet -= net_loss
-            self.transaction_data.explanation = Terms.LOSS
+            self.transaction_data.explanation = Terms.LOSS.value
 
         self.asset_and_price_data.cash_ready = self.transaction_data.total_value_of_wallet
         self.asset_and_price_data.asset_cost = self.asset_and_price_data.asset_sell_price * self.asset_and_price_data.asset_amount
@@ -470,26 +470,26 @@ class LongAndShort(BaseBacktesting):
         """
         candles = self.operation_data.candles_with_strategy
         for i in range(len(candles) - 2):
-            decision = candles[CandleColumns.DECISION][i]
+            decision = candles[CandleColumns.DECISION.value][i]
             if self.operation_data.has_cash:
-                if decision == Terms.LONG:
-                    self.operation_data.position = Terms.LONG
+                if decision == Terms.LONG.value:
+                    self.operation_data.position = Terms.LONG.value
                     self.prepare_to_buy(i)
                     continue
-                if decision == Terms.SHORT:
-                    self.operation_data.position = Terms.SHORT
+                if decision == Terms.SHORT.value:
+                    self.operation_data.position = Terms.SHORT.value
                     self.prepare_to_buy(i)
                     continue
                 continue
             if self.operation_data.has_coin:
-                if decision == Terms.SHORT:
+                if decision == Terms.SHORT.value:
                     self.sell_long(i)
-                    self.operation_data.position = Terms.SHORT
+                    self.operation_data.position = Terms.SHORT.value
                     self.prepare_to_buy(i)
                     continue
-                if decision == Terms.LONG:
+                if decision == Terms.LONG.value:
                     self.sell_short(i)
-                    self.operation_data.position = Terms.LONG
+                    self.operation_data.position = Terms.LONG.value
                     self.prepare_to_buy(i)
                     continue
                 continue

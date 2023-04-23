@@ -4,52 +4,58 @@ Created on Wed Apr 19 04:34:34 2023
 
 @author: Murat Ugur KIRAZ
 """
+from enum import Enum
 
-from dataclasses import dataclass
 
-@dataclass(frozen=True)
-class Terms:
-    RESISTENCE:str = "resistence"
-    SUPPORT:str = "support"
-    BUY:str = "buy"
-    SELL:str = "sell"
-    LONG:str = "long"
-    SHORT:str = "short"
-    PROFIT:str = "profit"
-    LOSS:str = "loss"
-    MACD:str = "MACD"
-    SIGNAL:str = "signal"
-    HISTOGRAM:str = "histogram"
-    CMF:str = "CMF"
-    RSI:str = "RSI"
+class Terms(Enum):
+    """
+    This class contains the Terms constants.
+    """
+    RESISTENCE = "resistence"
+    SUPPORT = "support"
+    BUY = "buy"
+    SELL = "sell"
+    LONG = "long"
+    SHORT = "short"
+    PROFIT = "profit"
+    LOSS = "loss"
+    MACD = "MACD"
+    SIGNAL = "signal"
+    HISTOGRAM = "histogram"
+    CMF = "CMF"
+    RSI = "RSI"
 
-@dataclass(frozen=True)
-class CandleColumns:
-    ID:str = "Id"
-    OPEN:str = "Open"
-    CLOSE:str = "Close"
-    LOW:str = "Low"
-    HIGH:str = "High"
-    VOLUME:str = "Volume"
-    HL2:str = "HL2"
-    HLC3:str = "HLC3"
-    OHCL4:str = "OHCL4"
-    HLCC4:str = "HLCC4"
-    DECISION:str = "Decision"
+class CandleColumns(Enum):
+    """
+    This class contains the Candle Columns constants.
+    """
+    ID = "Id"
+    OPEN = "Open"
+    CLOSE = "Close"
+    LOW = "Low"
+    HIGH = "High"
+    VOLUME = "Volume"
+    HL2 = "HL2"
+    HLC3 = "HLC3"
+    OHCL4 = "OHCL4"
+    HLCC4 = "HLCC4"
+    DECISION = "Decision"
 
-@dataclass(frozen = True)
-class TransactionColumns:
-    SYMBOL:str = "symbol"
-    OPERATION_TIME:str = "operation_time"
-    OPERATION:str = "operation"
-    POSITION:str = "position"
-    ASSET_AMOUNT:str = "asset_amount"
-    ASSET_PRICE :str = "asset_operation_price"
-    ASSET_COST:str = "asset_cost"
-    COMISSION:str = "comission"
-    COMISSION_FEE:str = "comission_fee"
-    ASSET_AMOUNT_AFTER_COMISSION:str = "coin_amount_after_comission"
-    STOP_PRICE:str = "asset_stop_price"
-    SELL_PRICE:str = "asset_sell_price"
-    WALLET_VALUE:str = "total_value_of_wallet"
-    EXPLANATION:str = "explanation"
+class TransactionColumns(Enum):
+    """
+    This class contains the Transaction Columns constants.
+    """
+    SYMBOL = "symbol"
+    OPERATION_TIME = "operation_time"
+    OPERATION = "operation"
+    POSITION = "position"
+    ASSET_AMOUNT = "asset_amount"
+    ASSET_PRICE = "asset_operation_price"
+    ASSET_COST = "asset_cost"
+    COMISSION = "comission"
+    COMISSION_FEE = "comission_fee"
+    ASSET_AMOUNT_AFTER_COMISSION = "coin_amount_after_comission"
+    STOP_PRICE = "asset_stop_price"
+    SELL_PRICE = "asset_sell_price"
+    WALLET_VALUE = "total_value_of_wallet"
+    EXPLANATION = "explanation"

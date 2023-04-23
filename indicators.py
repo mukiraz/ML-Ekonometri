@@ -23,31 +23,31 @@ class Indicators():
         self.candles = candles
 
     def __get_close(self):
-        return self.candles[CandleColumns.CLOSE]
+        return self.candles[CandleColumns.CLOSE.value]
 
     def __get_open(self):
-        return self.candles[CandleColumns.OPEN]
+        return self.candles[CandleColumns.OPEN.value]
 
     def __get_high(self):
-        return self.candles[CandleColumns.HIGH]
+        return self.candles[CandleColumns.HIGH.value]
 
     def __get_low(self):
-        return self.candles[CandleColumns.LOW]
+        return self.candles[CandleColumns.LOW.value]
 
     def __get_hl2(self):
-        series = (self.candles[CandleColumns.HIGH] + self.candles[CandleColumns.LOW]) / 2
+        series = (self.candles[CandleColumns.HIGH.value] + self.candles[CandleColumns.LOW.value]) / 2
         return pd.Series(series)
 
     def __get_hlc3(self):
-        series = (self.candles[CandleColumns.HIGH] + self.candles[CandleColumns.LOW] + self.candles[CandleColumns.CLOSE]) / 3
+        series = (self.candles[CandleColumns.HIGH.value] + self.candles[CandleColumns.LOW.value] + self.candles[CandleColumns.CLOSE.value]) / 3
         return pd.Series(series)
 
     def __get_ohlc4(self):
-        series = (self.candles[CandleColumns.OPEN] + self.candles[CandleColumns.HIGH]  + self.candles[CandleColumns.CLOSE] + self.candles[CandleColumns.LOW] ) / 4
+        series = (self.candles[CandleColumns.OPEN.value] + self.candles[CandleColumns.HIGH.value]  + self.candles[CandleColumns.CLOSE.value] + self.candles[CandleColumns.LOW.value] ) / 4
         return pd.Series(series)
 
     def __get_hlcc4(self):
-        series = (self.candles[CandleColumns.HIGH] + self.candles[CandleColumns.LOW] + self.candles[CandleColumns.CLOSE] + self.candles[CandleColumns.CLOSE]) / 4
+        series = (self.candles[CandleColumns.HIGH.value] + self.candles[CandleColumns.LOW.value] + self.candles[CandleColumns.CLOSE.value] + self.candles[CandleColumns.CLOSE.value]) / 4
         return pd.Series(series)
 
     def source(self, source:CandleColumns):
@@ -69,23 +69,23 @@ class Indicators():
 
         """
         source_dictionary = {
-            CandleColumns.CLOSE : self.__get_close(),
-            CandleColumns.OPEN : self.__get_open(),
-            CandleColumns.HIGH : self.__get_high(),
-            CandleColumns.LOW : self.__get_low(),
-            CandleColumns.HL2 : self.__get_hl2(),
-            CandleColumns.HLC3 : self.__get_hlc3(),
-            CandleColumns.OHCL4 : self.__get_ohlc4(),
-            CandleColumns.HLCC4 : self.__get_hlcc4()
+            CandleColumns.CLOSE.value : self.__get_close(),
+            CandleColumns.OPEN.value : self.__get_open(),
+            CandleColumns.HIGH.value : self.__get_high(),
+            CandleColumns.LOW.value : self.__get_low(),
+            CandleColumns.HL2.value : self.__get_hl2(),
+            CandleColumns.HLC3.value : self.__get_hlc3(),
+            CandleColumns.OHCL4.value : self.__get_ohlc4(),
+            CandleColumns.HLCC4.value : self.__get_hlcc4()
             }
 
         return source_dictionary[source]
 
     def get_atr_bands(self, atr_period : int =3,
                       atr_multiplier_upper : float = 2.5,
-                      src_upper:CandleColumns = CandleColumns.CLOSE,
+                      src_upper:CandleColumns = CandleColumns.CLOSE.value,
                       atr_multiplier_lower : float = 2.5,
-                      src_lower :CandleColumns = CandleColumns.CLOSE):
+                      src_lower :CandleColumns = CandleColumns.CLOSE.value):
         """
         This function establishes ATR bands.
 
@@ -111,8 +111,8 @@ class Indicators():
         atr = self.candles.ta.atr(atr_period)
         atr_upper = self.source(src_upper) + atr * atr_multiplier_upper
         atr_lower = self.source(src_lower) - atr * atr_multiplier_lower
-        atr_bands = {Terms.RESISTENCE:atr_upper,
-                    Terms.SUPPORT:atr_lower}
+        atr_bands = {Terms.RESISTENCE.value:atr_upper,
+                    Terms.SUPPORT.value:atr_lower}
         return pd.DataFrame(atr_bands, index=None)
 
     def get_rsi(self, length:int = 14) -> pd.DataFrame:
@@ -132,7 +132,7 @@ class Indicators():
         """
         rsi = self.candles.ta.rsi(length = length)
         arr = rsi.to_numpy()
-        return pd.DataFrame(arr, columns=[Terms.RSI])
+        return pd.DataFrame(arr, columns=[Terms.RSI.value])
 
     def get_macd(self,  slow: int = 26, fast: int = 12, signal: int = 9, fillna: bool = False)  -> pd.DataFrame:
         """
@@ -157,9 +157,9 @@ class Indicators():
 
         """
         signals = self.candles.ta.macd(slow, fast, signal, fillna)
-        signals.columns.values[0] = Terms.MACD
-        signals.columns.values[1] = Terms.HISTOGRAM
-        signals.columns.values[2] = Terms.SIGNAL
+        signals.columns.values[0] = Terms.MACD.value
+        signals.columns.values[1] = Terms.HISTOGRAM.value
+        signals.columns.values[2] = Terms.SIGNAL.value
         return signals
 
     def get_cmf(self)  -> pd.DataFrame:
@@ -172,4 +172,4 @@ class Indicators():
             Returns CMF signal
 
         """
-        return self.candles.ta.cmf().rename(Terms.CMF)
+        return self.candles.ta.cmf().rename(Terms.CMF.value)
